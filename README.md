@@ -18,7 +18,7 @@
 
 ### Схемы:
 #### Интеграция через самостоятельную интеграцию:
-![telegram-cloud-photo-size-2-5298704074109212772-y](https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/043db79b-066c-4dec-a64a-6555e8be6b48)
+![image](https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/eeef7c20-4119-4a70-8a9b-ebeb04e751ba)
 
 #### Интеграция через наше решение:
 ![telegram-cloud-photo-size-2-5298704074109212784-y](https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/46f6c325-a5a1-4361-bac6-710b4060fa8c)
@@ -32,7 +32,7 @@ https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/106ca
 https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/d8227568-24bd-4c4f-8afe-6bcc57e3393b
 
 #### Самостоятельная интеграция
-
+https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/0155bc25-91d3-4e76-9d52-9f11830ad057
 
 ## Примеры кода:
 
