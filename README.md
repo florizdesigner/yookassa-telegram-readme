@@ -2,15 +2,15 @@
 > **Полезные ссылки:**
 > - [Документация нового API ЮKassa](https://yookassa.ru/developers/payment-acceptance/getting-started/quick-start)
 > - [Инструкция по подключению нативного решения в Telegram (через методы sendInvoice, createInvoiceLink)](https://yookassa.ru/docs/support/payments/onboarding/integration/cms-module/telegram)
-### Предисловие:
+## Предисловие:
 #### Есть два варианта интеграции ЮKassa в бот Telegram: 
-* **через [собственное решение](https://yookassa.ru/docs/support/payments/onboarding/integration/cms-module/telegram)**: нативное решение используя API Telegram, магазин в ЮKassa должен быть на e-mail протоколе;
-* через самостоятельную интеграцию (обычно используется [протокол API](https://yookassa.ru/developers/payment-acceptance/getting-started/quick-start))
+* **через [собственное решение](https://yookassa.ru/docs/support/payments/onboarding/integration/cms-module/telegram)**: нативное решение используя API Telegram, магазин в ЮKassa должен быть на e-mail протоколе: [демонстрация оплаты (ссылка на бота Telegram)](https://t.me/YooKassaTestShopBot);
+* через самостоятельную интеграцию (обычно используется [протокол API](https://yookassa.ru/developers/payment-acceptance/getting-started/quick-start)).
 
 #### Наше решение, плюсы и минусы:
 * Нет цепочки редиректов, используется встроенный интерфейс, который понятен пользователю.
 * Простая и понятная интеграция.
-* Только один способ оплаты, который не поддерживает холдирование, рекуррентные платежи.
+* Только один способ оплаты - карты, который не поддерживает холдирование, рекуррентные платежи.
 * Нет обработки неуспешных платежей, в отличие от API (стандартная ошибка Telegram).
 
 #### Интеграция по API ЮKassa, плюсы и минусы:
@@ -18,7 +18,13 @@
 * Поддержка ФФД 1.2 для тех, у кого подключена интеграции с онлайн-кассой.
 * Есть много готовых конструкторов ботов с интеграцией по нашему API.
 
-### Схемы:
+## Основные моменты по работе с ЮKassa:
+* Если у вас включена автоотправка чеков (Мой налог или онлайн-касса), вам требуется передавать данные для чеков (в нативной интеграции передается в provider_data, по API - ключ receipt в запросе на создание платежа).
+* Наше нативное решение работает только по ФФД 1.05 (т.е. если ваша касса настроена по ФФД 1.2, то передавать СНО/признак предмета/способа расчета - не получится).
+* В параметре prices (нативное решение) сумма передается в копейках, а в данных для чека (provider_data) - в рублях.
+* В нашем решении на моменте получения платежного токена бот запрашивает параметр shopArticleId - это не парметр scid из ЛК ЮKassa, поэтому если вы не знаете его - укажите 0 по инструкции бота.
+
+## Схемы:
 #### Интеграция через самостоятельную интеграцию:
 ![image](https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/eeef7c20-4119-4a70-8a9b-ebeb04e751ba)
 
@@ -106,14 +112,14 @@
   }
 }
 ```
-### Визуально:
+## Визуальные примеры интеграций:
 #### Метод sendInvoice
 https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/106ca73c-7957-499e-a98a-41afee4f0821
 
 #### Метод createInvoiceLink
 https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/d8227568-24bd-4c4f-8afe-6bcc57e3393b
 
-#### Самостоятельная интеграция (один из вариантов, наше видение)ч
+#### Самостоятельная интеграция (один из вариантов, наше видение)
 https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/0155bc25-91d3-4e76-9d52-9f11830ad057
 
 ## Примеры кода:
@@ -231,9 +237,10 @@ bot.launch()
 #### Пример самописной интеграции на JavaScript:
 Ссылка на проект — https://github.com/florizdesigner/yookassa_telegram_bot
 
-#### Возможные ошибки:
+## Возможные ошибки / ответы на вопросы:
 **Q:** Получаю такую ошибку при попытке оплаты, что делать?
-![telegram-cloud-photo-size-2-5314699563111667265-y](https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/0494e898-a911-4591-8a95-d71feccd4854)
+
+<img src="https://github.com/florizdesigner/yookassa-telegram-readme/assets/56426989/0494e898-a911-4591-8a95-d71feccd4854" width="400"/>
 
 **A:** Вы провели интеграцию по нативному решению, но магазин настроен по новому протоколу API. Либо необходимо изменить протокол подключения (написать на b2b_support@yoomoney.ru, указав ваш shopid, e-mail для уведомлений об успешных платежах и описание проблемы), либо заново настроить интеграцию через новый протокол API.
 
@@ -247,5 +254,11 @@ bot.launch()
 
 **A:** Нет, Telegram Payments API не поддерживает оплату через веб-версии (только официальные мобильные и десктопные клиенты).
 
----                                                                
-                                                                                            © tech-support yookassa.ru
+---
+**Q:** Не проходит платеж, ошибка **BOT_PRECHECKOUT_TIMEOUT**
+
+**A:** Если в течении 10 секунд не был получен ответ на PreCheckoutQuery, то будет выдаваться эта ошибка. Вам необходимо проверить, почему от вас нет ответа на PreCheckoutQuery (пункт 2 в [инструкции](https://yookassa.ru/docs/support/payments/onboarding/integration/cms-module/telegram#telegram__03)).
+
+
+---
+© tech-support yookassa.ru
